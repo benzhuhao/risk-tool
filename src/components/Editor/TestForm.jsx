@@ -75,6 +75,7 @@ let tempRisk = {
     isBreachingRiskAppetite: "",
     riskAppetiteScore: 0,
     residualRiskScore: 0,
+    riskCategoryIndex: 0,
 }
 
 const getTimeNow = () => {
@@ -88,7 +89,9 @@ const getBusinessUnitValue = (watchValue) => {
 
 const getRiskCategory = (category) => {
     const head = category.split(" - ");
-    return riskCategoryMapper.find(elem => elem.category === head[1]).description;
+    const index = riskCategoryMapper.findIndex(elem => elem.category === head[1]);
+    tempRisk.riskCategoryIndex = index + 1;
+    return riskCategoryMapper[index].description;
 }
 
 const getGroupRiskAppetite = (category) => {
@@ -114,6 +117,26 @@ const getAppetiteRating = (temp) => {
     return "";
 }
 
+const getRiskID = () => {
+    let bu = tempRisk.business_unit_name.split(" - ", 1);
+    let pillar = tempRisk.riskPillar.charAt(0);
+    let pillarIndex = function() {
+        switch(pillar) {
+            case 'O': return 1; 
+            case 'F': return 2;
+            case 'R': return 3;
+            case 'C': return 4;
+            default:
+                return 0;
+        } 
+    };
+    if(tempRisk.riskCategoryIndex === 0) {
+        getRiskCategory(tempRisk.riskCategory);
+    }
+    let riskCatIndex = tempRisk.riskCategoryIndex > 9 ? tempRisk.riskCategoryIndex : '0' + tempRisk.riskCategoryIndex;
+
+    return bu + '-' + pillar + '-' + pillarIndex() + '-' + riskCatIndex + '-01';
+}
 
 export default function TestForm() {
     const classes = useStyles();
@@ -121,8 +144,18 @@ export default function TestForm() {
     const changeGlobalState = useGlobalState();
     tempRisk = { ...changeGlobalState.row };
     tempRisk.dateAdded = getTimeNow();
+    
+    const handleSubRiskNameChange = (event) => {
+        tempRisk.subRiskName = event.target.value;
+        changeGlobalState.change_subRiskName(event.target.value);
+    }
+    const handleSubRiskDiscChange = (event) => {
+        tempRisk.subRiskDesc = event.target.value;
+        changeGlobalState.change_subRiskDesc(event.target.value);
+    }
+    
     const handleChange = (type, event) => {
-        console.log('render', event);
+        
         switch (type) {
             case TYPE.change_business_unit_name:
                 tempRisk.business_unit_name = event.target.value;
@@ -132,11 +165,6 @@ export default function TestForm() {
             case TYPE.change_business_unit_type:
                 tempRisk.business_unit_type = event.target.value;
                 changeGlobalState.change_business_unit_type(getBusinessUnitValue(event.target.value));
-    
-            // eslint-disable-next-line no-fallthrough
-            case TYPE.change_subRiskID:
-                tempRisk.subRiskID = "ABL-R-1-22-33";
-                changeGlobalState.change_subRiskID("ABL-R-1-22-33");
                 break;
     
             case TYPE.change_riskPillar:
@@ -144,6 +172,7 @@ export default function TestForm() {
                 tempRisk.riskPillar = event.target.value;
                 changeGlobalState.change_riskPillar(pillar);
                 break;
+
             // eslint-disable-next-line no-fallthrough
             case TYPE.change_riskCategory:
                 tempRisk.riskCategory = event.target.value;
@@ -158,6 +187,10 @@ export default function TestForm() {
             case TYPE.change_riskCategoryDesc:
                 tempRisk.riskCategoryDesc = getRiskCategory(event.target.value);
                 changeGlobalState.change_riskCategoryDesc(getRiskCategory(event.target.value));
+            // eslint-disable-next-line no-fallthrough
+            case TYPE.change_subRiskID:
+                tempRisk.subRiskID = getRiskID(); //"ABL-R-1-22-33";
+                changeGlobalState.change_subRiskID(tempRisk.subRiskID);
                 break;
             case TYPE.change_subRiskName:
                 tempRisk.subRiskName = event.target.value;
@@ -224,8 +257,7 @@ export default function TestForm() {
     // useCallback(() => {
     //         handleChange
     //     },[type, event]);
-    
-    
+
     return (
         <Paper style={{ textAlign: 'center', padding: 16, margin: 'auto', maxWidth: 700 }}>
             <Grid container alignItems="flex-start" spacing={2}>
@@ -243,15 +275,15 @@ export default function TestForm() {
                             <option value="BL - DMS Governance Ltd">BL - DMS Governance Ltd</option>
                             <option value="BL - DMS Bank and Trust Ltd">BL - DMS Bank and Trust Ltd</option>
                             <option value="BL - DMS Investment Management Services (Europe) Ltd">BL - DMS Investment Management Services (Europe) Ltd</option>
-                            <option value="AB - DMS FATCA Services Ltd">AB - DMS FATCA Services Ltd</option>
-                            <option value="AB - DMS Compliance Services">AB - DMS Compliance Services</option>
-                            <option value="AB - DMS Market Access Ltd">AB - DMS Market Access Ltd</option>
-                            <option value="AB - DMS Governance Risk & Compliance Services Ltd">AB - DMS Governance Risk & Compliance Services Ltd</option>
-                            <option value="AB - DMS Corporate Services Ltd">AB - DMS Corporate Services Ltd</option>
-                            <option value="AB - DMS Corporate Services (Ireland) Ltd">AB - DMS Corporate Services (Ireland) Ltd</option>
-                            <option value="AB - Host Capital Ltd">AB - Host Capital Ltd</option>
-                            <option value="AB - DMS Capital Solutions (UK) Ltd">AB - DMS Capital Solutions (UK) Ltd</option>
-                            <option value="AB - Investment Risk Services Ltd">AB - Investment Risk Services Ltd</option>
+                            <option value="ABL - DMS FATCA Services Ltd">AB - DMS FATCA Services Ltd</option>
+                            <option value="ABL - DMS Compliance Services">AB - DMS Compliance Services</option>
+                            <option value="ABL - DMS Market Access Ltd">AB - DMS Market Access Ltd</option>
+                            <option value="ABL - DMS Governance Risk & Compliance Services Ltd">AB - DMS Governance Risk & Compliance Services Ltd</option>
+                            <option value="ABL - DMS Corporate Services Ltd">AB - DMS Corporate Services Ltd</option>
+                            <option value="ABL - DMS Corporate Services (Ireland) Ltd">AB - DMS Corporate Services (Ireland) Ltd</option>
+                            <option value="ABL - Host Capital Ltd">AB - Host Capital Ltd</option>
+                            <option value="ABL - DMS Capital Solutions (UK) Ltd">AB - DMS Capital Solutions (UK) Ltd</option>
+                            <option value="ABL - Investment Risk Services Ltd">AB - Investment Risk Services Ltd</option>
                             <option value="CF - AML COE Teams">CF - AML COE Teams</option>
                             <option value="CF - IT Team">CF - IT Team</option>
                             <option value="CF - Compliance Team">CF - Compliance Team</option>
@@ -374,7 +406,7 @@ export default function TestForm() {
                             name="subRiskName"
                             label="Sub Risk Name"
                             value={tempRisk.subRiskName}
-                            onChange={(e) => handleChange(TYPE.change_subRiskName, e)}
+                            onChange={handleSubRiskNameChange/*(e) => handleChange(TYPE.change_subRiskName, e)*/}
                             variant="outlined"
                         />
                     </FormControl>
@@ -389,7 +421,7 @@ export default function TestForm() {
                             rows="6"
                             value={tempRisk.subRiskDesc}
                             variant="outlined"
-                            onChange={(e) => handleChange(TYPE.change_subRiskDesc, e)}
+                            onChange={handleSubRiskDiscChange/*(e) => handleChange(TYPE.change_subRiskDesc, e)*/}
                         />
                     </FormControl>
                 </Grid>

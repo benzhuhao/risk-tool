@@ -1,6 +1,6 @@
 export const business_unit_name_mapper = {
     BL: "Business Line",
-    AB: "Ancillary Business Line",
+    ABL: "Ancillary Business Line",
     CF: "Core Function",
 };
 

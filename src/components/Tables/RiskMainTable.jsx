@@ -257,6 +257,7 @@ export default function RiskMainTable(props) {
                         border: '1px solid black',
                         borderSpacing: 0,
                         borderCollapse: 'collapse',
+                        alignContent: 'center'
                     },
                     search: true,
                     sorting: true,
