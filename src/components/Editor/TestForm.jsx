@@ -153,7 +153,21 @@ export default function TestForm() {
         tempRisk.subRiskDesc = event.target.value;
         changeGlobalState.change_subRiskDesc(event.target.value);
     }
-    
+    /*
+        function useFormImput(initValue) {
+            const [value, setValue] = useState(initValue);
+            function handleChange(e) {
+                setValue(e.target.value);
+            }
+            return {
+                value,
+                onChange: handleChange
+            }
+        }
+        ==============================
+        const name = useFormInput('mary');
+        <input {...name} />
+    */
     const handleChange = (type, event) => {
         
         switch (type) {
