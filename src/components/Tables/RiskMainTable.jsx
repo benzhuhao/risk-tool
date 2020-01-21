@@ -187,12 +187,14 @@ export default function RiskMainTable(props) {
                 }
                 changeGlobalState.setRiskRegFormOpen(false);
                 setOpen(false);
+                setEdit(false);
                 break;
             case 'cancel':
-                if(edit) {
+                if(edit === 'true') {
                     changeGlobalState.addRowInTable(changeGlobalState.row);
                 }
                 changeGlobalState.setRiskRegFormOpen(false);
+                setEdit(false);
                 setOpen(false);
                 break;
             default:
