@@ -45,7 +45,7 @@ const getCellWithStyle = (data) => {
                 case "Regulatory - Regulatory Change Risk":
                 case "Regulatory - Anti Money Laundering & CTF Risk":
                 case "Regulatory - Legal Risk":
-                case "Regulatory": 
+                case "Regulatory":
                     return {
                         ...base,
                         background: 'rgb(79,97,130)', padding: 10,
@@ -66,7 +66,7 @@ const getCellWithStyle = (data) => {
                 case "Core Function - Finance Team Risk":
                 case "Core Function - Business Development Team Risk":
                 case "Core Function - Audit Team Risk":
-                case "Core Function": 
+                case "Core Function":
                     return {
                         ...base,
                         background: 'rgb(119,155,144)', padding: 10,
@@ -102,7 +102,7 @@ const headers = [
     { title: "Risk Category", field: "riskCategory", },
     {
         title: "Sub-Risk ID", field: "subRiskID",
-        render: rowData => isError(rowData) ? (<>{rowData.subRiskID}<Icon style={{ color: 'red', fontSize: 50 }}>warning_outlined</Icon></>) : <>{rowData.subRiskID}</>
+        render: rowData => isError(rowData) ? (<>{rowData.subRiskID}<Icon style={{ color: 'red', fontSize: 50 }}>warning_outlined</Icon></>) : (<>{rowData.subRiskID}</>)
     },
     { title: "Sub Risk Name", field: "subRiskName", },
     { title: "Sub Risk Description", field: "subRiskDesc", },
@@ -281,9 +281,9 @@ export default function RiskMainTable(props) {
                 maxWidth='md'
                 fullWidth={true}
             >
-                <DialogTitle id="scroll-dialog-title" style={{textAlign: 'center'}}>Risk Register Form</DialogTitle>
+                <DialogTitle id="scroll-dialog-title" style={{ textAlign: 'center' }}>Risk Register Form</DialogTitle>
                 <DialogContent dividers={true}>
-                    <TestForm/>
+                    <TestForm />
                 </DialogContent>
                 <DialogActions>
                     <Button
